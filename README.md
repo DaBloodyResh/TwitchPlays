@@ -30,7 +30,7 @@ def move_left():
 
 # Start it running
 if __name__ == "__main__":
-    manager = run('TwitchUserName')
+    manager = exe('TwitchUserName')
     manager.countdown()
     manager.process_messages()
 ```
