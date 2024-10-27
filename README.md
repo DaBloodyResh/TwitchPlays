@@ -18,6 +18,7 @@ pip install -r  requirements.txt
 pip install keyboard
 pip install pyautogui
 pip install PySimpleGUI
+pip install PyDirectInput
 ```
 
 PySimpleGUI is used for the PyUI.py file for the UI window, but this window is not required it's just for ease of access for someone who doesn't want to code new commands. 
