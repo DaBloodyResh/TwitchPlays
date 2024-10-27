@@ -3,3 +3,4 @@ pydirectinput
 pyautogui
 pynput
 requests
+PySimpleGUI

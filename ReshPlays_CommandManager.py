@@ -1,5 +1,6 @@
 
 import concurrent.futures
+import inspect
 import time
 import keyboard
 import pyautogui
@@ -59,20 +60,19 @@ class CommandManager:
 
         # look up the command and execute it if it exists
         command_func = self.command_registry.get(msg)
+
+        if not command_func:
+            # print(f"No command registered for: {msg}")
+            return
+        print(f"Received command: {msg} from {username}")
+
         try:
-            if command_func:
-                print(f"Received command: {msg} from {username}")
-                command_func(self)
-            # else:
-            #     print(f"No command registered for: {msg}")
-
-        except TypeError:
-            try:
-                if command_func:
-                    command_func()
-
-            except Exception as e:
-                raise e
+            # Check if `command_func` requires `self` as an argument
+            sig = inspect.signature(command_func)
+            if len(sig.parameters) == 1:
+                command_func(self)  # Call with `self` if one parameter
+            else:
+                command_func()  # Call without `self` if no parameters
 
         except Exception as e:
             print(f"Encountered exception: {type(e).__name__}: {e}")
@@ -84,22 +84,28 @@ class CommandManager:
             self.active_tasks = [t for t in self.active_tasks if not t.done()]
             new_messages = self.connection.twitch_receive_messages()
 
+            if keyboard.is_pressed(escapeKeys):
+                print("Exiting program.")
+                break
+
             if new_messages:
                 self.message_queue += new_messages
                 self.message_queue = self.message_queue[-self.max_queue_length:]
 
             messages_to_handle = self._get_messages_to_handle()
-            if messages_to_handle:
-                for message in messages_to_handle:
-                    if len(self.active_tasks) <= self.max_workers:
-                        self.active_tasks.append(
-                            self.thread_pool.submit(self.handle_message, message))
-                    else:
-                        print(f'WARNING: Active tasks ({len(self.active_tasks)}) exceed max workers ({self.config.max_workers}).')
+            if not messages_to_handle:
+                continue
 
-            if keyboard.is_pressed(escapeKeys):
-                print("Exiting program.")
-                break
+            for message in messages_to_handle:
+                if len(self.active_tasks) <= self.max_workers:
+                    self.active_tasks.append(
+                        self.thread_pool.submit(self.handle_message, message))
+                    continue
+
+                print(
+                    f'WARNING: Active tasks ({len(self.active_tasks)})',
+                    f' exceed max workers ({self.config.max_workers}).'
+                )
 
     def _get_messages_to_handle(self):
         if not self.message_queue:
