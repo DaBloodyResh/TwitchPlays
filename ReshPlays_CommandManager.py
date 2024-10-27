@@ -1,33 +1,14 @@
-'''
-MESSAGE_RATE controls how fast we process incoming Twitch Chat messages. It's
-the number of seconds it will take to handle all messages in the queue.
-This is used because Twitch delivers messages in "batches", rather than
-one at a time. So we process the messages over MESSAGE_RATE duration, 
-rather than processing the entire batch at once. A smaller number means we go
-through the message queue faster, but we will run out of messages faster and
-activity might "stagnate" while waiting for a new batch.
-A higher number means we go through the queue slower, and messages are more
-evenly spread out, but delay from the viewers' perspective is higher.
-You can set this to 0 to disable the queue and handle all messages immediately.
-However, then the wait before another "batch" of messages is more noticeable.
 
-MAX_QUEUE_LENGTH limits the number of commands that will be processed in a
-given "batch" of messages. e.g. if you get a batch of 50 messages, you can
-choose to only process the first 10 of them and ignore the others.
-This is helpful for games where too many inputs at once
-can actually hinder the gameplay.
-Setting to ~50 is good for total chaos, ~5-10 is good for 2D platformers
-'''
 import concurrent.futures
 import time
 import keyboard
 import pyautogui
 import TwitchPlays_Connection
-from TwitchPlays_KeyCodes import *
+from ReshPlays_PyAutoGUI_Simplifier import *
 
 
 class CommandManager:
-    # Command registry
+    # command registry
     command_registry = {}
 
     def __init__(self, twitch_channel, youtube_channel_id=None,
@@ -76,7 +57,7 @@ class CommandManager:
         msg = message['message'].lower()
         username = message['username'].lower()
 
-        # Look up the command and execute it if it exists
+        # look up the command and execute it if it exists
         command_func = self.command_registry.get(msg)
         try:
             if command_func:
@@ -97,8 +78,8 @@ class CommandManager:
             print(f"Encountered exception: {type(e).__name__}: {e}")
 
     def process_messages(self):
-        excapeKeys = 'shift+backspace'
-        print(f"press {excapeKeys} to stop")
+        escapeKeys = 'shift+backspace'
+        print(f"press {escapeKeys} to stop")
         while True:
             self.active_tasks = [t for t in self.active_tasks if not t.done()]
             new_messages = self.connection.twitch_receive_messages()
@@ -114,10 +95,9 @@ class CommandManager:
                         self.active_tasks.append(
                             self.thread_pool.submit(self.handle_message, message))
                     else:
-                        print(f'WARNING: active tasks ({
-                              len(self.active_tasks)}) exceed max workers ({self.max_workers}).')
+                        print(f'WARNING: Active tasks ({len(self.active_tasks)}) exceed max workers ({self.config.max_workers}).')
 
-            if keyboard.is_pressed(excapeKeys):
+            if keyboard.is_pressed(escapeKeys):
                 print("Exiting program.")
                 break
 
