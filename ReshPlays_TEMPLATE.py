@@ -2,9 +2,11 @@ import time
 from ReshPlays_CommandManager import CommandManager as exe
 from ReshPlays_PyAutoGUI_Simplifier import *
 
+
 @exe.command("left")
 def move_left():
-        shortHold('a', 2)
+    shortHold('a', 2)
+
 
 @exe.command("right")
 def move_right():
@@ -27,7 +29,7 @@ def reverse():
 
 @exe.command("stop")
 def stop():
-    release('w') 
+    release('w')
     release('s')
     release('a')
     release('d')
@@ -41,8 +43,8 @@ def brake():
 
 
 @exe.command("shoot")
-def shoot ( ) :
-     leftClickHold(2)
+def shoot():
+    leftClickHold(2)
 
 
 @exe.command("aim up")
@@ -65,12 +67,12 @@ def run():
 
 @exe.command("removeheal")
 def removeheal():
-        press('5')
-        rightClick()
-        time.sleep(0.2)
-        leftClick()
-        release('right')
-        time.sleep(0.15)
+    press('5')
+    rightClick()
+    time.sleep(0.2)
+    leftClick()
+    release('right')
+    time.sleep(0.15)
 
 
 @exe.command("noheals")
@@ -89,11 +91,7 @@ def noheals():
 # everything under this is added through the Command Creator:
 
 
-    print(template_lines)
-
-
-
-    # Start the code running loop.
+# Start the code running loop.
 if __name__ == "__main__":
     manager = exe('DaBloodyResh')
     manager.countdown()
