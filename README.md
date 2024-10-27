@@ -1,4 +1,5 @@
-# TwitchPlays
+# ReshPlays
+## Based on TwitchPlays
 These files allows Twitch Chat or Youtube Chat to control your keyboard or mouse to play a game.
 
 
