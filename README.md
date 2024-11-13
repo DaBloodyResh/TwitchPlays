@@ -1,42 +1,58 @@
 # ReshPlays
-Based on TwitchPlays 
 
-These files allows Twitch Chat or Youtube Chat to control your keyboard or mouse to play a game.
+A modified version of [DougDoug's Twitch plays scripts](https://github.com/DougDougGithub/TwitchPlays), developed for DaBloodyResh with improvements to both structure and functionality.
 
+This tool enables Twitch or YouTube chat to control your keyboard or mouse inputs, providing an interactive experience during live streams.
 
-Original code is [DougDoung's Twitch plays scripts](https://github.com/DougDougGithub/TwitchPlays). Me (Wyatt) replaced a lot of code and restructured most of it to match with the already used pyautogui syntax, and added a gui window for ease of access to creating a new command.
+Key updates include restructuring the code to align with the existing pyautogui syntax, the addition of a GUI window for easier command creation, and an overall refactor to better maintainability.
 
+## Installing
 
-# Installing
-Download and Extract the files from [Here](https://github.com/DaBloodyResh/TwitchPlays/archive/refs/heads/main.zip)
+1. Download the project from [this link](https://github.com/DaBloodyResh/TwitchPlays/archive/refs/heads/main.zip) and extract the files to a folder on your computer.
 
-To run the code you will need to install Python 3.11 or newer.  
-If you don't have python installed already, and you are running Windows, get it [from here]([https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe](https://www.python.org/downloads/release/python-3110/)) **and be sure to click "Add Python to environment variables"** in the installer (Under Customize Install -> Advanced Options)
+2. If you don't already have Python installed, download it from [from here](<[https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe](https://www.python.org/downloads/release/python-3110/)>) (make sure to download Python 3.11 or newer).
 
-Additionally, you will need to install the following python modules using Pip:
+   > **Important**: During installation, be sure to check the box "Add Python to environment variables" (under _Customize Install_ → _Advanced Options_).
+
+3. Open a terminal or command prompt in the folder where you extracted the project files and run the following command to install the required dependencies:
 
 ```bash
 pip install -r  requirements.txt
-pip install keyboard
-pip install pyautogui
-pip install PySimpleGUI
-pip install PyDirectInput
-pip install Pynput
 ```
 
-PySimpleGUI is used for the PyUI.py file for the UI window, but this window is not required it's just for ease of access for someone who doesn't want to code new commands. 
-You can check it out [from here](https://github.com/PySimpleGUI/PySimpleGUI)
+4. _(Optional)_ The project includes a GUI window for easier command creation, implemented using [PySimpleGUI](https://github.com/PySimpleGUI/PySimpleGUI) This window is optional as it is simply for users who prefer not to code new commands manually.
 
-Once Python is set up, simply change the Twitch username (or Youtube channel ID) in ReshPlays_TEMPLATE.py, and you'll be ready to go.
+5. Open `ReshPlays_TEMPLATE.py`, change the Twitch username (or YouTube channel ID) to your own, and you're ready to start using the tool.
 
-# Example Useage
+6. Run the following command to start the app:
+```bash
+python ReshPlays_TEMPLATE.py
+```
+
+## Example Usage
+
 ```py
+from TwitchPlays_CommandManager import CommandManager as exe
+from ReshPlays_PyAutoGUI_Simplifier import shortHold
+
+# Command is looking for the key word 'left' in the chat
+@exe.command("left")
+def move_left():
+    shortHold("a", 1)  # Holds A key for 1 second
+
 # Start it running
 if __name__ == "__main__":
-    manager = exe('TwitchUserName')
-    manager.countdown()
-    manager.process_messages()
+    manager = exe('TwitchUserName')  # Replace with your user name
+    manager.countdown()  # Optional count down to give you some time 
+    manager.process_messages()  # Starts listening for chat messages
 ```
 
-# Credit
-This code is originally based off Wituz's Twitch Plays template, then expanded by DougDoug and DDarknut with help from Ottomated for the Youtube side. Modifications and clean up by catboy. Restructured for ease of use and access by wyatttwyattt!!
+## Credit
+
+- **Wituz**: Original creator of the Twitch Plays template.
+- **DougDoug**: and **DDarknut**: Expanded the core functionality.
+- **Ottomated**: Helped with on Youtube implementation
+- **catboy**: Refactored the code for improved structure and maintainability.
+- **Wyatt**: Contributed to the UI development.
+
+This project is based on the original Twitch Plays template by Wituz, with expansions by DougDoug and DDarknut and YouTube integration by Ottomated. The code was refactored for improved structure and maintainability by catboy, with UI development contributions from Wyatt.
